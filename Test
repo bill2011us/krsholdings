@@ -1,0 +1,104 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input, select {
+            margin-bottom: 10px;
+        }
+        #results {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Property Search</h1>
+<form id="searchForm">
+    <label for="location">Location:</label>
+    <input type="text" id="location" name="location"><br>
+
+    <label for="minPrice">Min Price:</label>
+    <input type="number" id="minPrice" name="minPrice"><br>
+
+    <label for="maxPrice">Max Price:</label>
+    <input type="number" id="maxPrice" name="maxPrice"><br>
+
+    <label for="bedrooms">Bedrooms:</label>
+    <input type="number" id="bedrooms" name="bedrooms" min="1"><br>
+
+    <label for="bathrooms">Bathrooms:</label>
+    <input type="number" id="bathrooms" name="bathrooms" min="1"><br>
+
+    <button type="submit">Search</button>
+</form>
+
+<div id="results">
+    <h2>Results</h2>
+    <ul id="propertyList"></ul>
+</div>
+
+<script>
+    const API_KEY = 'AIzaSyBCL8hNivqI26KTG0Y1W-AFY_zca50e8X4';
+    const SPREADSHEET_ID = '1XAXEJtweNzw1edwyVZgMMew6IPn71IdGlAhf2ZzxEC0';
+    const RANGE = 'Cleaned!A:Z'; // This references the 'Cleaned' sheet.
+
+    document.getElementById('searchForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        fetchData();
+    });
+
+    async function fetchData() {
+        const location = document.getElementById('location').value.toLowerCase();
+        const minPrice = document.getElementById('minPrice').value;
+        const maxPrice = document.getElementById('maxPrice').value;
+        const bedrooms = document.getElementById('bedrooms').value;
+        const bathrooms = document.getElementById('bathrooms').value;
+
+        const response = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${RANGE}?key=${API_KEY}`);
+        const data = await response.json();
+
+        const properties = data.values.slice(1); // Ignore the header row
+
+        const filteredProperties = properties.filter(property => {
+            const propertyLocation = property[0].toLowerCase(); // Assuming location is in column A
+            const propertyPrice = parseFloat(property[1]); // Assuming price is in column B
+            const propertyBedrooms = parseInt(property[2]); // Assuming bedrooms are in column C
+            const propertyBathrooms = parseInt(property[3]); // Assuming bathrooms are in column D
+
+            return (!location || propertyLocation.includes(location)) &&
+                   (!minPrice || propertyPrice >= minPrice) &&
+                   (!maxPrice || propertyPrice <= maxPrice) &&
+                   (!bedrooms || propertyBedrooms == bedrooms) &&
+                   (!bathrooms || propertyBathrooms == bathrooms);
+        });
+
+        displayResults(filteredProperties);
+    }
+
+    function displayResults(properties) {
+        const propertyList = document.getElementById('propertyList');
+        propertyList.innerHTML = '';
+
+        if (properties.length === 0) {
+            propertyList.innerHTML = '<li>No properties found matching your criteria.</li>';
+            return;
+        }
+
+        properties.forEach(property => {
+            const li = document.createElement('li');
+            li.textContent = `Location: ${property[0]}, Price: $${property[1]}, Bedrooms: ${property[2]}, Bathrooms: ${property[3]}`;
+            propertyList.appendChild(li);
+        });
+    }
+</script>
+
+</body>
+</html>
