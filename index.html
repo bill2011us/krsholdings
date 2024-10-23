@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -22,7 +23,7 @@
 
 <h1>Property Search</h1>
 <form id="searchForm">
-    <label for="location">Location:</label>
+    <label for="location">Location (City):</label>
     <input type="text" id="location" name="location"><br>
 
     <label for="minPrice">Min Price:</label>
@@ -68,10 +69,10 @@
         const properties = data.values.slice(1); // Ignore the header row
 
         const filteredProperties = properties.filter(property => {
-            const propertyLocation = property[0].toLowerCase(); // Assuming location is in column A
-            const propertyPrice = parseFloat(property[1]); // Assuming price is in column B
-            const propertyBedrooms = parseInt(property[2]); // Assuming bedrooms are in column C
-            const propertyBathrooms = parseInt(property[3]); // Assuming bathrooms are in column D
+            const propertyLocation = property[3].toLowerCase(); // City is in column D (index 3)
+            const propertyPrice = parseFloat(property[4]); // Price is in column E (index 4)
+            const propertyBedrooms = parseInt(property[5]); // Bedrooms are in column F (index 5)
+            const propertyBathrooms = parseInt(property[6]); // Bathrooms are in column G (index 6)
 
             return (!location || propertyLocation.includes(location)) &&
                    (!minPrice || propertyPrice >= minPrice) &&
@@ -94,7 +95,7 @@
 
         properties.forEach(property => {
             const li = document.createElement('li');
-            li.textContent = `Location: ${property[0]}, Price: $${property[1]}, Bedrooms: ${property[2]}, Bathrooms: ${property[3]}`;
+            li.textContent = `Location: ${property[3]}, Price: $${property[4]}, Bedrooms: ${property[5]}, Bathrooms: ${property[6]}`;
             propertyList.appendChild(li);
         });
     }
