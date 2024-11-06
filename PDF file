@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owner Statement Interactive Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        .hover-info {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            color: blue;
+        }
+        .hover-info .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 8px;
+            border-radius: 5px;
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+        }
+        .hover-info .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #333 transparent transparent transparent;
+        }
+        .hover-info:hover .tooltip-text {
+            visibility: visible;
+        }
+    </style>
+</head>
+<body>
+    <h1>Owner Statement: Report Period 09/13/2024 - 10/14/2024</h1>
+    
+    <h2>Portfolio Summary</h2>
+    <p>Previous Balance: <span class="hover-info">$225.00<span class="tooltip-text">Balance carried over from the last period.</span></span></p>
+    <p>Income: <span class="hover-info">+$2,460.00<span class="tooltip-text">Total income generated in this period.</span></span></p>
+    <p>Expenses: <span class="hover-info">-$200.00<span class="tooltip-text">Total expenses for repairs and maintenance.</span></span></p>
+    <p>Management Fees: <span class="hover-info">-$216.00<span class="tooltip-text">Fees paid to KRS Holdings.</span></span></p>
+    <p>Ending Balance: <span class="hover-info">$3,025.56<span class="tooltip-text">Balance after all income and expenses.</span></span></p>
+    
+    <h2>Income Details</h2>
+    <p><strong>Rent</strong>: <span class="hover-info">$2,400.00<span class="tooltip-text">Income from property rental payments.</span></span></p>
+    <p><strong>Late Fees</strong>: <span class="hover-info">$60.00<span class="tooltip-text">Additional fees due to late rent payment.</span></span></p>
+
+    <!-- Additional sections with hover tooltips as per the PDF content -->
+
+</body>
+</html>
